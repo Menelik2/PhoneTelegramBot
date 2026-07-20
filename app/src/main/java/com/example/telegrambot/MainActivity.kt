@@ -123,6 +123,81 @@ class MainActivity : AppCompatActivity() {
             btnExportLogs.setOnClickListener {
                 exportLogs()
             }
+            
+            navStatus.setOnClickListener { switchTab(0) }
+            navLogs.setOnClickListener { switchTab(1) }
+            navMacros.setOnClickListener { switchTab(2) }
+            navAdmin.setOnClickListener { switchTab(3) }
+        }
+        
+        switchTab(0)
+    }
+
+    private fun switchTab(tabIndex: Int) {
+        binding.apply {
+            // Reset all to unselected
+            navStatusIconBg.setBackgroundResource(android.R.color.transparent)
+            navLogsIconBg.setBackgroundResource(android.R.color.transparent)
+            navMacrosIconBg.setBackgroundResource(android.R.color.transparent)
+            navAdminIconBg.setBackgroundResource(android.R.color.transparent)
+            
+            navStatus.alpha = 0.6f
+            navLogs.alpha = 0.6f
+            navMacros.alpha = 0.6f
+            navAdmin.alpha = 0.6f
+            
+            navStatusText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navLogsText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navMacrosText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navAdminText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            
+            // Hide all sections
+            layoutStatusSection.visibility = android.view.View.GONE
+            layoutLogsHeader.visibility = android.view.View.GONE
+            layoutLogsSection.visibility = android.view.View.GONE
+            layoutMacrosSection.visibility = android.view.View.GONE
+            
+            // Default all buttons to visible (if layoutMacrosSection is shown)
+            btnStartBot.visibility = android.view.View.VISIBLE
+            btnStopBot.visibility = android.view.View.VISIBLE
+            btnRefresh.visibility = android.view.View.VISIBLE
+            btnConfigureBot.visibility = android.view.View.VISIBLE
+            btnClearLogs.visibility = android.view.View.VISIBLE
+            btnExportLogs.visibility = android.view.View.VISIBLE
+            
+            when(tabIndex) {
+                0 -> {
+                    navStatusIconBg.setBackgroundResource(R.drawable.bg_nav_active)
+                    navStatus.alpha = 1.0f
+                    navStatusText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    layoutStatusSection.visibility = android.view.View.VISIBLE
+                }
+                1 -> {
+                    navLogsIconBg.setBackgroundResource(R.drawable.bg_nav_active)
+                    navLogs.alpha = 1.0f
+                    navLogsText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    layoutLogsHeader.visibility = android.view.View.VISIBLE
+                    layoutLogsSection.visibility = android.view.View.VISIBLE
+                }
+                2 -> {
+                    navMacrosIconBg.setBackgroundResource(R.drawable.bg_nav_active)
+                    navMacros.alpha = 1.0f
+                    navMacrosText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    layoutMacrosSection.visibility = android.view.View.VISIBLE
+                    btnConfigureBot.visibility = android.view.View.GONE
+                    btnClearLogs.visibility = android.view.View.GONE
+                    btnExportLogs.visibility = android.view.View.GONE
+                }
+                3 -> {
+                    navAdminIconBg.setBackgroundResource(R.drawable.bg_nav_active)
+                    navAdmin.alpha = 1.0f
+                    navAdminText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    layoutMacrosSection.visibility = android.view.View.VISIBLE
+                    btnStartBot.visibility = android.view.View.GONE
+                    btnStopBot.visibility = android.view.View.GONE
+                    btnRefresh.visibility = android.view.View.GONE
+                }
+            }
         }
     }
 

