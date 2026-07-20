@@ -1,0 +1,6 @@
+{
+  "name": "Telegram Bot",
+  "description": "A Telegram Bot built in Android.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
