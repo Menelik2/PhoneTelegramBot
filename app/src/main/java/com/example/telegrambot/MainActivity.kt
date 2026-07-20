@@ -146,56 +146,41 @@ class MainActivity : AppCompatActivity() {
             navMacros.alpha = 0.6f
             navAdmin.alpha = 0.6f
             
-            navStatusText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
-            navLogsText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
-            navMacrosText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
-            navAdminText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navStatusText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navLogsText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navMacrosText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_muted))
+            navAdminText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_muted))
             
-            // Hide all sections
-            layoutStatusSection.visibility = android.view.View.GONE
-            layoutLogsHeader.visibility = android.view.View.GONE
-            layoutLogsSection.visibility = android.view.View.GONE
-            layoutMacrosSection.visibility = android.view.View.GONE
-            
-            // Default all buttons to visible (if layoutMacrosSection is shown)
-            btnStartBot.visibility = android.view.View.VISIBLE
-            btnStopBot.visibility = android.view.View.VISIBLE
-            btnRefresh.visibility = android.view.View.VISIBLE
-            btnConfigureBot.visibility = android.view.View.VISIBLE
-            btnClearLogs.visibility = android.view.View.VISIBLE
-            btnExportLogs.visibility = android.view.View.VISIBLE
+            // Hide all tab containers
+            findViewById<android.widget.LinearLayout>(R.id.tab_status_container).visibility = android.view.View.GONE
+            findViewById<android.widget.LinearLayout>(R.id.tab_logs_container).visibility = android.view.View.GONE
+            findViewById<android.widget.LinearLayout>(R.id.tab_macros_container).visibility = android.view.View.GONE
+            findViewById<android.widget.LinearLayout>(R.id.tab_admin_container).visibility = android.view.View.GONE
             
             when(tabIndex) {
                 0 -> {
                     navStatusIconBg.setBackgroundResource(R.drawable.bg_nav_active)
                     navStatus.alpha = 1.0f
-                    navStatusText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
-                    layoutStatusSection.visibility = android.view.View.VISIBLE
+                    navStatusText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    findViewById<android.widget.LinearLayout>(R.id.tab_status_container).visibility = android.view.View.VISIBLE
                 }
                 1 -> {
                     navLogsIconBg.setBackgroundResource(R.drawable.bg_nav_active)
                     navLogs.alpha = 1.0f
-                    navLogsText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
-                    layoutLogsHeader.visibility = android.view.View.VISIBLE
-                    layoutLogsSection.visibility = android.view.View.VISIBLE
+                    navLogsText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    findViewById<android.widget.LinearLayout>(R.id.tab_logs_container).visibility = android.view.View.VISIBLE
                 }
                 2 -> {
                     navMacrosIconBg.setBackgroundResource(R.drawable.bg_nav_active)
                     navMacros.alpha = 1.0f
-                    navMacrosText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
-                    layoutMacrosSection.visibility = android.view.View.VISIBLE
-                    btnConfigureBot.visibility = android.view.View.GONE
-                    btnClearLogs.visibility = android.view.View.GONE
-                    btnExportLogs.visibility = android.view.View.GONE
+                    navMacrosText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    findViewById<android.widget.LinearLayout>(R.id.tab_macros_container).visibility = android.view.View.VISIBLE
                 }
                 3 -> {
                     navAdminIconBg.setBackgroundResource(R.drawable.bg_nav_active)
                     navAdmin.alpha = 1.0f
-                    navAdminText.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.text_dark))
-                    layoutMacrosSection.visibility = android.view.View.VISIBLE
-                    btnStartBot.visibility = android.view.View.GONE
-                    btnStopBot.visibility = android.view.View.GONE
-                    btnRefresh.visibility = android.view.View.GONE
+                    navAdminText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_dark))
+                    findViewById<android.widget.LinearLayout>(R.id.tab_admin_container).visibility = android.view.View.VISIBLE
                 }
             }
         }

@@ -31,241 +31,288 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:padding="16dp"
         android:layout_marginBottom="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Status Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/layout_status_section"
+        <!-- TAB 0: Status -->
+        <LinearLayout
+            android:id="@+id/tab_status_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/card_border"
-            app:strokeWidth="1dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="28dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/card_border"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="28dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CONNECTION STATUS"
+                            android:textColor="@color/text_muted"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1" />
+
+                        <TextView
+                            android:id="@+id/status_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔴 Offline"
+                            android:textColor="@color/text_dark"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+                    
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="end">
+                        
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="UPTIME"
+                            android:textColor="@color/text_muted"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+                            
+                        <TextView
+                            android:id="@+id/uptime_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="00:00:00"
+                            android:textColor="@color/text_muted"
+                            android:textSize="14sp"
+                            android:background="#F1F5F9"
+                            android:paddingHorizontal="6dp"
+                            android:paddingVertical="2dp"
+                            android:fontFamily="monospace" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_start_bot"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:minHeight="80dp"
+                    app:cornerRadius="16dp"
+                    android:text="▶️ Start"
+                    android:textColor="@color/btn_start_text"
+                    app:backgroundTint="@color/btn_start_bg"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_stop_bot"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:minHeight="80dp"
+                    app:cornerRadius="16dp"
+                    android:text="⏹️ Stop Bot"
+                    android:textColor="@color/btn_stop_text"
+                    app:backgroundTint="@color/btn_stop_bg"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:minHeight="80dp"
+                    app:cornerRadius="16dp"
+                    android:text="🔄 Refresh"
+                    android:textColor="@color/btn_refresh_text"
+                    app:backgroundTint="@color/btn_refresh_bg"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+            </GridLayout>
+        </LinearLayout>
+
+        <!-- TAB 1: Logs -->
+        <LinearLayout
+            android:id="@+id/tab_logs_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="20dp"
-                android:gravity="center_vertical">
+                android:layout_marginBottom="8dp">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="CONNECTION STATUS"
-                        android:textColor="@color/text_muted"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.1" />
-
-                    <TextView
-                        android:id="@+id/status_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔴 Offline"
-                        android:textColor="@color/text_dark"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-                
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="end">
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="UPTIME"
-                        android:textColor="@color/text_muted"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="4dp" />
-                        
-                    <TextView
-                        android:id="@+id/uptime_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00:00:00"
-                        android:textColor="@color/text_muted"
-                        android:textSize="14sp"
-                        android:background="#F1F5F9"
-                        android:paddingHorizontal="6dp"
-                        android:paddingVertical="2dp"
-                        android:fontFamily="monospace" />
-                </LinearLayout>
-
+                    android:text="LIVE LOG STREAM"
+                    android:textColor="@color/text_muted"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
 
-        <!-- Control Buttons -->
-        <GridLayout
-            android:id="@+id/layout_macros_section"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:layout_marginBottom="16dp">
-
-            <!-- Configure Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_configure_bot"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:minHeight="80dp"
-                app:cornerRadius="16dp"
-                android:text="⚙️ Configure"
-                android:textColor="@color/btn_configure_text"
-                app:backgroundTint="@color/btn_configure_bg"
-                android:textStyle="bold"
-                android:textSize="12sp" />
-
-            <!-- Start Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_start_bot"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:minHeight="80dp"
-                app:cornerRadius="16dp"
-                android:text="▶️ Start"
-                android:textColor="@color/btn_start_text"
-                app:backgroundTint="@color/btn_start_bg"
-                android:textStyle="bold"
-                android:textSize="12sp" />
-
-            <!-- Stop Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_stop_bot"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:minHeight="80dp"
-                app:cornerRadius="16dp"
-                android:text="⏹️ Stop Bot"
-                android:textColor="@color/btn_stop_text"
-                app:backgroundTint="@color/btn_stop_bg"
-                android:textStyle="bold"
-                android:textSize="12sp" />
-
-            <!-- Refresh Button -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_refresh"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:minHeight="80dp"
-                app:cornerRadius="16dp"
-                android:text="🔄 Refresh"
-                android:textColor="@color/btn_refresh_text"
-                app:backgroundTint="@color/btn_refresh_bg"
-                android:textStyle="bold"
-                android:textSize="12sp" />
-
-            <!-- Export Logs -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_export_logs"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:minHeight="80dp"
-                app:cornerRadius="16dp"
-                android:text="📤 Export Logs"
-                android:textColor="@color/btn_export_text"
-                app:backgroundTint="@color/btn_export_bg"
-                android:textStyle="bold"
-                android:textSize="12sp" />
-
-            <!-- Clear Logs -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_clear_logs"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
-                android:minHeight="80dp"
-                app:cornerRadius="16dp"
-                android:text="🗑️ Clear Logs"
-                android:textColor="@color/btn_stop_text"
-                app:backgroundTint="@color/white"
-                app:strokeColor="@color/btn_stop_bg"
-                app:strokeWidth="1dp"
-                android:textStyle="bold"
-                android:textSize="12sp" />
-
-        </GridLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_logs_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="LIVE LOG STREAM"
-                android:textColor="@color/text_muted"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1" />
+                app:cardElevation="0dp"
+                app:strokeColor="@color/card_border"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="28dp"
+                android:layout_marginBottom="16dp">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_messages"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_export_logs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:minHeight="80dp"
+                    app:cornerRadius="16dp"
+                    android:text="📤 Export Logs"
+                    android:textColor="@color/btn_export_text"
+                    app:backgroundTint="@color/btn_export_bg"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_clear_logs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:minHeight="80dp"
+                    app:cornerRadius="16dp"
+                    android:text="🗑️ Clear Logs"
+                    android:textColor="@color/btn_stop_text"
+                    app:backgroundTint="@color/white"
+                    app:strokeColor="@color/btn_stop_bg"
+                    app:strokeWidth="1dp"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+            </GridLayout>
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/layout_logs_section"
+        <!-- TAB 2: Macros -->
+        <LinearLayout
+            android:id="@+id/tab_macros_container"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/card_border"
-            app:strokeWidth="1dp"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="28dp"
-            android:layout_marginBottom="16dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_messages"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⚡"
+                android:textSize="48sp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No macros configured."
+                android:textColor="@color/text_muted"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- TAB 3: Admin -->
+        <LinearLayout
+            android:id="@+id/tab_admin_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:layout_height="wrap_content"
+                android:columnCount="1">
 
-        </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_configure_bot"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_margin="6dp"
+                    android:minHeight="80dp"
+                    app:cornerRadius="16dp"
+                    android:text="⚙️ Configure Bot"
+                    android:textColor="@color/btn_configure_text"
+                    app:backgroundTint="@color/btn_configure_bg"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+            </GridLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -58,4 +58,30 @@ object GalleryHelper {
         }
         return null
     }
+    
+    fun getRecentGalleryPathsMessage(context: Context, limit: Int = 30): String {
+        try {
+            val projection = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor = context.contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                MediaStore.Images.Media.DATE_ADDED + " DESC"
+            )
+            
+            val paths = mutableListOf<String>()
+            cursor?.use {
+                val dataIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                while (it.moveToNext() && paths.size < limit) {
+                    paths.add(it.getString(dataIndex))
+                }
+            }
+            if (paths.isEmpty()) return "No photos found in gallery."
+            return "📸 Recent gallery files:\n" + paths.joinToString("\n")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return "❌ Error reading gallery."
+        }
+    }
 }

