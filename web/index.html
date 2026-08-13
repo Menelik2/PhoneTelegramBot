@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Telegram Bot Companion & Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --tg-theme-bg-color: #0f172a;
+            --tg-theme-text-color: #f8fafc;
+            --tg-theme-hint-color: #94a3b8;
+            --tg-theme-link-color: #38bdf8;
+            --tg-theme-button-color: #0284c7;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #1e293b;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+            --card-border: rgba(255, 255, 255, 0.06);
+        }
+
+        /* Use Telegram Theme colors when available */
+        body.telegram {
+            --tg-theme-bg-color: var(--tg-viewport-bg-color, #0f172a);
+            background-color: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+            color: var(--tg-theme-text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding-bottom: 80px; /* Space for nav bar */
+        }
+
+        /* Header design */
+        header {
+            padding: 24px 20px 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 0 15px var(--accent-glow);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info h1 {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color);
+        }
+
+        .status-badge {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Container & Tabs */
+        .container {
+            padding: 16px;
+            flex-grow: 1;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphic Cards */
+        .card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title i {
+            color: var(--tg-theme-link-color);
+        }
+
+        /* Metric Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .metric-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-top: 4px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: var(--tg-theme-hint-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Instructions list */
+        .step-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .step-num {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--tg-theme-link-color);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-text code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #f43f5e;
+            font-size: 13px;
+        }
+
+        /* Interactive Clicker Game */
+        .clicker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0;
+        }
+
+        .coin-score {
+            font-size: 32px;
+            font-weight: 800;
+            color: #f59e0b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+
+        .coin-button {
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fbbf24 0%, #d97706 100%);
+            border: 8px solid rgba(251, 191, 36, 0.2);
+            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.4), 0 0 40px rgba(251, 191, 36, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.08s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .coin-button:active {
+            transform: scale(0.94);
+        }
+
+        .coin-button i {
+            font-size: 72px;
+            color: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            animation: bounce 3s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Float effect for tap score */
+        .tap-float {
+            position: absolute;
+            color: #fbbf24;
+            font-size: 24px;
+            font-weight: 800;
+            pointer-events: none;
+            animation: floatUp 0.8s ease-out forwards;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.2); }
+        }
+
+        /* Styled list for console messages */
+        .console-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            list-style: none;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .console-item {
+            margin-bottom: 8px;
+            line-height: 1.4;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.02);
+            padding-bottom: 6px;
+        }
+
+        .console-time {
+            color: var(--tg-theme-hint-color);
+        }
+
+        .console-tag {
+            color: #38bdf8;
+            font-weight: bold;
+        }
+
+        .console-msg {
+            color: #e2e8f0;
+        }
+
+        /* Action Buttons */
+        .btn {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f1f5f9;
+            box-shadow: none;
+        }
+
+        .btn-outline:active {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-success {
+            background-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Input styling */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--tg-theme-link-color);
+        }
+
+        /* Copy Button Overlay */
+        .copy-wrapper {
+            position: relative;
+        }
+
+        .btn-copy {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            color: #cbd5e1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: background 0.2s;
+        }
+
+        .btn-copy:active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Leaderboard styling */
+        .leaderboard-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .leaderboard-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+
+        .leaderboard-item.user-highlight {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.05);
+        }
+
+        .rank-badge {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .rank-1 { background: #f59e0b; color: #0f172a; }
+        .rank-2 { background: #94a3b8; color: #0f172a; }
+        .rank-3 { background: #b45309; color: #f8fafc; }
+        .rank-other { background: rgba(255, 255, 255, 0.1); color: var(--tg-theme-text-color); }
+
+        .leaderboard-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+
+        .player-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .player-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .player-score {
+            font-weight: 700;
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+        }
+
+        /* Rotation animation for refresh button */
+        .rotating {
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Bottom Nav Bar */
+        nav.tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 10px 14px 10px;
+            z-index: 100;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--tg-theme-hint-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 20%;
+            outline: none;
+            transition: color 0.2s;
+        }
+
+        .tab-btn i {
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--tg-theme-link-color);
+        }
+
+        .tab-btn.active i {
+            transform: translateY(-2px);
+        }
+
+        /* Alert notification */
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid var(--tg-theme-link-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            opacity: 0;
+            z-index: 999;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="user-profile">
+            <div class="avatar" id="user-avatar">B</div>
+            <div class="user-info">
+                <h1 id="user-name">Guest User</h1>
+                <p id="user-role">Telegram Companion App</p>
+            </div>
+        </div>
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            <span>Bot Online</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- TAB 1: DASHBOARD -->
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">App Mode</div>
+                    <div class="metric-value" style="color: #38bdf8; font-size: 18px; margin-top: 8px;">Polling</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Status</div>
+                    <div class="metric-value" style="color: #4ade80; font-size: 18px; margin-top: 8px;">Ready</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Your Companion Bot URL</span>
+                </div>
+                <p style="font-size: 13px; color: var(--tg-theme-hint-color); margin-bottom: 14px; line-height: 1.5;">
+                    This URL can be loaded inside Telegram as a <strong>Mini App</strong> or <strong>Menu Button</strong>!
+                </p>
+                <div class="form-group copy-wrapper">
+                    <input type="text" class="form-input" id="current-url-input" readonly style="padding-right: 48px;">
+                    <button class="btn-copy" onclick="copyAppUrl()"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD SECTION -->
+            <div class="card" id="leaderboard-card">
+                <div class="card-title" style="color: #fbbf24;">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Leaderboard Rankings</span>
+                </div>
+                <p style="font-size: 13px; color: var(--tg-theme-hint-color); margin-bottom: 14px; line-height: 1.5;">
+                    Top ranking players in real time. Submit your taps by playing the <strong>Tap Earn</strong> game!
+                </p>
+                
+                <div style="margin-bottom: 16px;">
+                    <ul class="leaderboard-list" id="leaderboard-list">
+                        <!-- Filled by Javascript dynamically -->
+                    </ul>
+                </div>
+                
+                <button class="btn btn-outline" id="refresh-leaderboard-btn" onclick="refreshLeaderboard()">
+                    <i class="fa-solid fa-arrows-rotate" id="refresh-icon"></i> Refresh Rankings
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <span>Test Bot Broadcast</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message Payload</label>
+                    <input type="text" class="form-input" id="broadcast-message" value="Hello from my Telegram Web App!">
+                </div>
+                <button class="btn" onclick="sendMockBroadcast()">
+                    <i class="fa-solid fa-paper-plane"></i> Send Test Notification
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 2: MINI APP SETUP (BOTFATHER) -->
+        <div id="tab-setup" class="tab-content">
+            <div class="card">
+                <div class="card-title" style="color: #38bdf8;">
+                    <i class="fa-solid fa-robot"></i>
+                    <span>Add Mini App to your Bot</span>
+                </div>
+                <ul class="step-list">
+                    <li class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-text">Open Telegram and search for <strong>@BotFather</strong>.</div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-text">Send the command <code>/newapp</code>.</div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-text">Select your bot, and enter a name and description for your Mini App.</div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">4</div>
+                        <div class="step-text">Choose a high-quality square photo for your icon.</div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">5</div>
+                        <div class="step-text">When prompted for the <strong>Web App URL</strong>, paste this secure link:</div>
+                    </li>
+                </ul>
+                <div class="form-group copy-wrapper" style="margin-top: 14px;">
+                    <input type="text" class="form-input" id="setup-url-input" readonly style="padding-right: 48px;">
+                    <button class="btn-copy" onclick="copySetupUrl()"><i class="fa-regular fa-copy"></i></button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title" style="color: #fbbf24;">
+                    <i class="fa-solid fa-bars"></i>
+                    <span>Set as Bot Menu Button</span>
+                </div>
+                <p style="font-size: 13px; color: var(--tg-theme-hint-color); margin-bottom: 12px; line-height: 1.5;">
+                    Add a permanent visual button in the chat next to the text field to launch your App with one tap!
+                </p>
+                <ul class="step-list">
+                    <li class="step-item">
+                        <div class="step-num">1</div>
+                        <div class="step-text">In <strong>@BotFather</strong>, send <code>/mybots</code> and choose your bot.</div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">2</div>
+                        <div class="step-text">Go to <strong>Bot Settings</strong> &rarr; <strong>Menu Button</strong> &rarr; <strong>Configure</strong>.</div>
+                    </li>
+                    <li class="step-item">
+                        <div class="step-num">3</div>
+                        <div class="step-text">Paste this URL and enter a button text (e.g. "Launch App").</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 3: CLICKER GAME -->
+        <div id="tab-game" class="tab-content">
+            <div class="card" style="text-align: center; background: rgba(30, 41, 59, 0.25);">
+                <div class="card-title" style="justify-content: center; color: #fbbf24;">
+                    <i class="fa-solid fa-coins"></i>
+                    <span>Telegram Clicker Demo</span>
+                </div>
+                <p style="font-size: 12px; color: var(--tg-theme-hint-color); margin-bottom: 16px;">
+                    Tap the glowing coin to earn points! This illustrates standard interactive WebApp capabilities including Telegram Haptic Vibrations.
+                </p>
+                
+                <div class="clicker-container">
+                    <div class="coin-score" id="score-display">
+                        <i class="fa-solid fa-coins"></i> <span id="coin-count">0</span>
+                    </div>
+                    <button class="coin-button" id="coin-btn" onmousedown="tapCoin(event)" ontouchstart="tapCoin(event)">
+                        <i class="fa-solid fa-bolt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: APP LOGGER -->
+        <div id="tab-logs" class="tab-content">
+            <div class="card">
+                <div class="card-title">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>Live Activity Log</span>
+                </div>
+                <ul class="console-list" id="log-list">
+                    <li class="console-item">
+                        <span class="console-time">[04:19:31]</span>
+                        <span class="console-tag">[System]:</span>
+                        <span class="console-msg">Companion Web Server listening...</span>
+                    </li>
+                    <li class="console-item">
+                        <span class="console-time">[04:19:35]</span>
+                        <span class="console-tag">[Telegram]:</span>
+                        <span class="console-msg">WebApp SDK loaded successfully.</span>
+                    </li>
+                </ul>
+                <button class="btn btn-outline" style="margin-top: 12px;" onclick="clearLogs()">
+                    <i class="fa-solid fa-trash-can"></i> Clear Logs
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST POPUP -->
+    <div class="toast" id="toast-message">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-text">Success!</span>
+    </div>
+
+    <!-- NAVIGATION BAR -->
+    <nav class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('dashboard')">
+            <i class="fa-solid fa-chart-line"></i>
+            Dashboard
+        </button>
+        <button class="tab-btn" onclick="switchTab('setup')">
+            <i class="fa-solid fa-screwdriver-wrench"></i>
+            Mini App
+        </button>
+        <button class="tab-btn" onclick="switchTab('game')">
+            <i class="fa-solid fa-gamepad"></i>
+            Tap Earn
+        </button>
+        <button class="tab-btn" onclick="switchTab('logs')">
+            <i class="fa-solid fa-terminal"></i>
+            Logs
+        </button>
+    </nav>
+
+    <script>
+        // Initialize Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        
+        if (tg) {
+            tg.expand(); // Fullscreen
+            tg.ready();
+            
+            // Apply theme parameters
+            const user = tg.initDataUnsafe?.user;
+            if (user) {
+                document.getElementById('user-name').textContent = `${user.first_name} ${user.last_name || ''}`;
+                document.getElementById('user-role').textContent = user.username ? `@${user.username}` : 'Telegram Member';
+                document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
+                
+                addLog('User', `Authenticated Telegram user: ${user.first_name} (ID: ${user.id})`);
+            }
+            
+            document.body.classList.add('telegram');
+        }
+
+        // Set URLs on inputs
+        const currentUrl = window.location.origin + window.location.pathname;
+        document.getElementById('current-url-input').value = currentUrl;
+        document.getElementById('setup-url-input').value = currentUrl;
+
+        // Mock leaderboard data
+        let leaderboardData = [
+            { username: 'durov', name: 'Pavel Durov', score: 2500, isSelf: false },
+            { username: 'BotFather', name: 'BotFather', score: 1840, isSelf: false },
+            { username: 'CryptoKing', name: 'Crypto King', score: 1210, isSelf: false },
+            { username: 'player', name: 'You', score: 0, isSelf: true }
+        ];
+
+        function renderLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            if (!list) return;
+            list.innerHTML = '';
+            
+            // Sync user's score from local storage
+            const userScore = parseInt(localStorage.getItem('companion_clicker_score') || '0');
+            const currentUser = tg?.initDataUnsafe?.user;
+            
+            leaderboardData.forEach(item => {
+                if (item.isSelf) {
+                    item.score = userScore;
+                    if (currentUser) {
+                        item.name = currentUser.first_name + (currentUser.last_name ? ' ' + currentUser.last_name : '');
+                        item.username = currentUser.username || 'user_' + currentUser.id;
+                    }
+                }
+            });
+
+            // Sort data descending by score
+            const sortedData = [...leaderboardData].sort((a, b) => b.score - a.score);
+
+            sortedData.forEach((player, index) => {
+                const rank = index + 1;
+                let rankClass = 'rank-other';
+                if (rank === 1) rankClass = 'rank-1';
+                else if (rank === 2) rankClass = 'rank-2';
+                else if (rank === 3) rankClass = 'rank-3';
+
+                const initial = player.name.charAt(0).toUpperCase();
+                const itemEl = document.createElement('li');
+                itemEl.className = `leaderboard-item ${player.isSelf ? 'user-highlight' : ''}`;
+                
+                // Color variation for avatar based on name
+                const colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b'];
+                const avatarColor = player.isSelf ? 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)' : colors[player.name.length % colors.length];
+
+                itemEl.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="rank-badge ${rankClass}">${rank}</div>
+                        <div class="player-avatar" style="background: ${avatarColor}">${initial}</div>
+                        <div>
+                            <div class="player-name">${player.name}</div>
+                            <div style="font-size: 11px; color: var(--tg-theme-hint-color);">@${player.username}</div>
+                        </div>
+                    </div>
+                    <div class="player-score">
+                        <i class="fa-solid fa-coins" style="color: #fbbf24;"></i> ${player.score}
+                    </div>
+                `;
+                list.appendChild(itemEl);
+            });
+        }
+
+        // Simulating fetching rankings from telegram server
+        function refreshLeaderboard() {
+            const btn = document.getElementById('refresh-leaderboard-btn');
+            const icon = document.getElementById('refresh-icon');
+            
+            if (icon.classList.contains('rotating')) return;
+
+            icon.classList.add('rotating');
+            btn.disabled = true;
+            addLog('System', 'Querying Telegram Bot Database for latest rank updates...');
+            
+            if (tg?.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+
+            setTimeout(() => {
+                // Randomly increase some competitor scores to simulate active players
+                leaderboardData.forEach(item => {
+                    if (!item.isSelf) {
+                        item.score += Math.floor(Math.random() * 5) * 5;
+                    }
+                });
+
+                renderLeaderboard();
+                
+                icon.classList.remove('rotating');
+                btn.disabled = false;
+                
+                showToast('Leaderboard rankings synchronized!');
+                addLog('System', 'Successfully synchronized leaderboard rankings with server (200 OK)');
+                
+                if (tg?.HapticFeedback) {
+                    tg.HapticFeedback.notificationOccurred('success');
+                }
+            }, 1000);
+        }
+
+        // Initialize leaderboard on load
+        renderLeaderboard();
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Trigger lightweight haptic feedback
+            if (tg?.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+
+            // Remove active classes
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            // Add active class
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            
+            // Find tab button and activate it
+            const buttons = document.querySelectorAll('.tab-btn');
+            for (let btn of buttons) {
+                if (btn.innerText.toLowerCase().includes(tabId === 'setup' ? 'mini app' : tabId === 'game' ? 'tap' : tabId)) {
+                    btn.classList.add('active');
+                    break;
+                }
+            }
+
+            addLog('System', `Switched to ${tabId} tab`);
+        }
+
+        // Clicker game logic
+        let score = parseInt(localStorage.getItem('companion_clicker_score') || '0');
+        document.getElementById('coin-count').innerText = score;
+
+        function tapCoin(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            score += 1;
+            document.getElementById('coin-count').innerText = score;
+            localStorage.setItem('companion_clicker_score', score);
+            renderLeaderboard();
+
+            // Trigger telegram haptic feedback
+            if (tg?.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+
+            // Get click location
+            const btn = document.getElementById('coin-btn');
+            const rect = btn.getBoundingClientRect();
+            
+            let clientX, clientY;
+            if (e.touches && e.touches[0]) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            // Create float point text
+            const floatText = document.createElement('div');
+            floatText.className = 'tap-float';
+            floatText.innerText = '+1';
+            floatText.style.left = `${clientX - 15}px`;
+            floatText.style.top = `${clientY - 30}px`;
+            
+            document.body.appendChild(floatText);
+            
+            setTimeout(() => {
+                floatText.remove();
+            }, 800);
+        }
+
+        // Copy actions
+        function copyAppUrl() {
+            const input = document.getElementById('current-url-input');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            showToast('URL Copied successfully!');
+            addLog('System', 'Bot URL copied to clipboard.');
+        }
+
+        function copySetupUrl() {
+            const input = document.getElementById('setup-url-input');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            showToast('Setup URL Copied!');
+            addLog('System', 'Setup URL copied to clipboard.');
+        }
+
+        // Toast display helper
+        function showToast(text) {
+            const toast = document.getElementById('toast-message');
+            document.getElementById('toast-text').innerText = text;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Add log helper
+        function addLog(tag, message) {
+            const list = document.getElementById('log-list');
+            const item = document.createElement('li');
+            item.className = 'console-item';
+            
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+            
+            item.innerHTML = `
+                <span class="console-time">[${timeStr}]</span>
+                <span class="console-tag">[${tag}]:</span>
+                <span class="console-msg">${message}</span>
+            `;
+            
+            list.appendChild(item);
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('log-list').innerHTML = `
+                <li class="console-item">
+                    <span class="console-time">[System]</span>
+                    <span class="console-tag">[Console]:</span>
+                    <span class="console-msg">Logs cleared.</span>
+                </li>
+            `;
+        }
+
+        function sendMockBroadcast() {
+            const msg = document.getElementById('broadcast-message').value;
+            showToast('Notification Sent!');
+            addLog('Broadcast', `Sent payload: "${msg}"`);
+            
+            if (tg) {
+                tg.showAlert(`Broadcast payload sent to bot receiver: "${msg}"`);
+            }
+        }
+    </script>
+</body>
+</html>

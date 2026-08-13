@@ -31,11 +31,16 @@ object Preferences {
     }
 
     fun saveBotToken(context: Context, token: String) {
-        getPrefs(context).edit().putString(KEY_BOT_TOKEN, token).apply()
+        val sanitized = token.trim().replace("\r", "").replace("\n", "")
+        getPrefs(context).edit().putString(KEY_BOT_TOKEN, sanitized).apply()
     }
 
     fun getBotToken(context: Context): String? {
-        return getPrefs(context).getString(KEY_BOT_TOKEN, null)
+        val stored = getPrefs(context).getString(KEY_BOT_TOKEN, null)
+        if (!stored.isNullOrEmpty()) {
+            return stored.trim().replace("\r", "").replace("\n", "")
+        }
+        return "8737241034:AAGtIGWu1KXUKncSyW6x_TmrV2c32kWWKhI"
     }
 
     fun saveWebhookUrl(context: Context, url: String) {

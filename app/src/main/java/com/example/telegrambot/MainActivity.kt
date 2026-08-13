@@ -23,6 +23,8 @@ import com.example.telegrambot.utils.Preferences
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Timer
 import java.util.TimerTask
 import java.util.Locale
@@ -206,7 +208,10 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.READ_CALL_LOG,
             Manifest.permission.CAMERA,
-            Manifest.permission.CALL_PHONE
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             permissions.add(Manifest.permission.POST_NOTIFICATIONS)
@@ -238,7 +243,31 @@ class MainActivity : AppCompatActivity() {
             if (token != null) {
                 val isValid = TelegramApi.validateBot(token)
                 if (isValid) {
-                    startBotService()
+                    val webhook = Preferences.getWebhookUrl(this@MainActivity) ?: ""
+                    if (webhook.isNotEmpty()) {
+                        MaterialAlertDialogBuilder(this@MainActivity)
+                            .setTitle("⚠️ Webhook Active")
+                            .setMessage("A Webhook URL ($webhook) is currently configured.\n\nWhen a webhook is active, Telegram stops sending updates via polling, meaning this app will not receive or log messages.\n\nWould you like to clear the webhook and start in polling mode?")
+                            .setPositiveButton("Clear & Start") { _, _ ->
+                                lifecycleScope.launch {
+                                    val success = TelegramApi.setWebhook(token, "")
+                                    if (success) {
+                                        Preferences.saveWebhookUrl(this@MainActivity, "")
+                                        startBotService()
+                                    } else {
+                                        showError("Failed to clear webhook on Telegram. Bot starting anyway.")
+                                        startBotService()
+                                    }
+                                }
+                            }
+                            .setNegativeButton("Keep Webhook") { _, _ ->
+                                startBotService()
+                            }
+                            .setNeutralButton("Cancel", null)
+                            .show()
+                    } else {
+                        startBotService()
+                    }
                 } else {
                     showError("Invalid Bot Token. Please reconfigure.")
                     showBotConfigurationDialog()
@@ -306,16 +335,42 @@ class MainActivity : AppCompatActivity() {
 
                 if (token.isNotEmpty()) {
                     Preferences.saveBotToken(this, token)
-                    if (webhook.isNotEmpty()) {
-                        Preferences.saveWebhookUrl(this, webhook)
+                    
+                    var finalWebhook = webhook
+                    if (finalWebhook.isNotEmpty()) {
+                        if (!finalWebhook.startsWith("https://", ignoreCase = true)) {
+                            if (finalWebhook.startsWith("http://", ignoreCase = true)) {
+                                showError("Telegram webhooks require secure HTTPS. Please use an https:// URL.")
+                                return@setPositiveButton
+                            } else {
+                                finalWebhook = "https://$finalWebhook"
+                            }
+                        }
                     }
-                    Toast.makeText(this, "Bot configured successfully!", Toast.LENGTH_SHORT).show()
+                    
+                    Preferences.saveWebhookUrl(this, finalWebhook)
+                    Toast.makeText(this, "Configuration saved locally...", Toast.LENGTH_SHORT).show()
                     
                     // Validate and set webhook
                     lifecycleScope.launch {
                         val isValid = TelegramApi.validateBot(token)
-                        if (isValid && webhook.isNotEmpty()) {
-                            TelegramApi.setWebhook(token, webhook)
+                        if (isValid) {
+                            val success = TelegramApi.setWebhook(token, finalWebhook)
+                            withContext(Dispatchers.Main) {
+                                if (success) {
+                                    if (finalWebhook.isEmpty()) {
+                                        Toast.makeText(this@MainActivity, "Webhook cleared successfully! Bot is now in polling mode.", Toast.LENGTH_LONG).show()
+                                    } else {
+                                        Toast.makeText(this@MainActivity, "Webhook registered successfully with Telegram!", Toast.LENGTH_LONG).show()
+                                    }
+                                } else {
+                                    Toast.makeText(this@MainActivity, "Error: Telegram rejected the Webhook URL.", Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                showError("Invalid Bot Token. Telegram rejected configuration.")
+                            }
                         }
                     }
                 } else {

