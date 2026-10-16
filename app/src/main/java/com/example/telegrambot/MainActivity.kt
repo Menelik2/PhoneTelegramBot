@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             btnRefresh.setOnClickListener {
-                // Refresh UI
                 checkBotStatus()
                 loadMessages()
             }
@@ -137,7 +136,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun switchTab(tabIndex: Int) {
         binding.apply {
-            // Reset all to unselected
             navStatusIconBg.setBackgroundResource(android.R.color.transparent)
             navLogsIconBg.setBackgroundResource(android.R.color.transparent)
             navMacrosIconBg.setBackgroundResource(android.R.color.transparent)
@@ -153,8 +151,7 @@ class MainActivity : AppCompatActivity() {
             navMacrosText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_muted))
             navAdminText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_muted))
             
-            // Hide all tab containers
-            findViewById<android.widget.LinearLayout>(R.id.tab_status_container).visibility = android.view.View.GONE
+            findViewById<android.view.View>(R.id.tab_status_container).visibility = android.view.View.GONE
             findViewById<android.widget.LinearLayout>(R.id.tab_logs_container).visibility = android.view.View.GONE
             findViewById<android.widget.LinearLayout>(R.id.tab_macros_container).visibility = android.view.View.GONE
             findViewById<android.widget.LinearLayout>(R.id.tab_admin_container).visibility = android.view.View.GONE
@@ -164,7 +161,7 @@ class MainActivity : AppCompatActivity() {
                     navStatusIconBg.setBackgroundResource(R.drawable.bg_nav_active)
                     navStatus.alpha = 1.0f
                     navStatusText.setTextColor(androidx.core.content.ContextCompat.getColor(this@MainActivity, R.color.text_dark))
-                    findViewById<android.widget.LinearLayout>(R.id.tab_status_container).visibility = android.view.View.VISIBLE
+                    findViewById<android.view.View>(R.id.tab_status_container).visibility = android.view.View.VISIBLE
                 }
                 1 -> {
                     navLogsIconBg.setBackgroundResource(R.drawable.bg_nav_active)
@@ -237,7 +234,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Validate bot token
         lifecycleScope.launch {
             val token = Preferences.getBotToken(this@MainActivity)
             if (token != null) {
@@ -351,7 +347,6 @@ class MainActivity : AppCompatActivity() {
                     Preferences.saveWebhookUrl(this, finalWebhook)
                     Toast.makeText(this, "Configuration saved locally...", Toast.LENGTH_SHORT).show()
                     
-                    // Validate and set webhook
                     lifecycleScope.launch {
                         val isValid = TelegramApi.validateBot(token)
                         if (isValid) {
