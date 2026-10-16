@@ -1,465 +1,504 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout 
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="4dp">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_dark"
-            app:title="Bot Controller"
-            app:titleTextColor="@android:color/white">
-
-            <ImageView
-                android:id="@+id/status_indicator"
-                android:layout_width="14dp"
-                android:layout_height="14dp"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="end|center_vertical"
-                android:src="@drawable/ic_offline" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:layout_marginBottom="80dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_marginBottom="72dp">
 
-        <!-- TAB 0: Status -->
-        <LinearLayout
+        <!-- TAB 0: HOME -->
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/tab_status_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:fillViewport="true"
+            android:visibility="visible"
+            android:clipToPadding="false">
 
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/card_border"
-                app:strokeWidth="1dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="28dp"
-                android:layout_marginBottom="16dp">
+                android:orientation="vertical">
 
+                <!-- Gradient Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:gravity="center_vertical">
+                    android:background="@drawable/bg_header_gradient"
+                    android:orientation="vertical"
+                    android:paddingTop="48dp"
+                    android:paddingBottom="32dp"
+                    android:paddingHorizontal="24dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="CONNECTION STATUS"
-                            android:textColor="@color/text_muted"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.1" />
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="PhoneTelegramBot"
+                                android:textColor="#FFFFFF"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Remote control dashboard"
+                                android:textColor="#E0E7FF"
+                                android:textSize="13sp"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/status_indicator"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:src="@drawable/ic_offline"
+                            android:contentDescription="Status" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_status_offline"
+                        android:paddingHorizontal="14dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginTop="20dp">
 
                         <TextView
                             android:id="@+id/status_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="🔴 Offline"
-                            android:textColor="@color/text_dark"
-                            android:textSize="24sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
-
+                            android:text="Offline"
+                            android:textColor="@color/status_offline"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
-                    
+
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="end">
-                        
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="UPTIME"
-                            android:textColor="@color/text_muted"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="4dp" />
-                            
+                            android:text="⏱  Uptime"
+                            android:textColor="#C7D2FE"
+                            android:textSize="13sp" />
+
                         <TextView
                             android:id="@+id/uptime_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="00:00:00"
-                            android:textColor="@color/text_muted"
-                            android:textSize="14sp"
-                            android:background="#F1F5F9"
-                            android:paddingHorizontal="6dp"
-                            android:paddingVertical="2dp"
-                            android:fontFamily="monospace" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:fontFamily="monospace"
+                            android:layout_marginStart="12dp" />
                     </LinearLayout>
-
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_start_bot"
-                    android:layout_width="0dp"
+                <!-- Cards -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="6dp"
-                    android:minHeight="80dp"
-                    app:cornerRadius="16dp"
-                    android:text="▶️ Start"
-                    android:textColor="@color/btn_start_text"
-                    app:backgroundTint="@color/btn_start_bg"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_marginTop="-16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_stop_bot"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="6dp"
-                    android:minHeight="80dp"
-                    app:cornerRadius="16dp"
-                    android:text="⏹️ Stop Bot"
-                    android:textColor="@color/btn_stop_text"
-                    app:backgroundTint="@color/btn_stop_bg"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardElevation="2dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardBackgroundColor="@color/card_bg"
+                        app:strokeColor="@color/card_border"
+                        app:strokeWidth="1dp"
+                        android:layout_marginBottom="16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_refresh"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="6dp"
-                    android:minHeight="80dp"
-                    app:cornerRadius="16dp"
-                    android:text="🔄 Refresh"
-                    android:textColor="@color/btn_refresh_text"
-                    app:backgroundTint="@color/btn_refresh_bg"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
 
-            </GridLayout>
-        </LinearLayout>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="QUICK ACTIONS"
+                                android:textColor="@color/text_muted"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.08" />
 
-        <!-- TAB 1: Logs -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="16dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_start_bot"
+                                    style="@style/Widget.MaterialComponents.Button"
+                                    android:layout_width="0dp"
+                                    android:layout_height="52dp"
+                                    android:layout_weight="1"
+                                    android:text="Start Bot"
+                                    android:textAllCaps="false"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:cornerRadius="14dp"
+                                    app:backgroundTint="@color/btn_start_bg"
+                                    android:textColor="@color/btn_start_text"
+                                    android:layout_marginEnd="8dp"
+                                    app:icon="@drawable/ic_play"
+                                    app:iconTint="@color/btn_start_text"
+                                    app:iconGravity="textStart" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_stop_bot"
+                                    style="@style/Widget.MaterialComponents.Button"
+                                    android:layout_width="0dp"
+                                    android:layout_height="52dp"
+                                    android:layout_weight="1"
+                                    android:text="Stop Bot"
+                                    android:textAllCaps="false"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    app:cornerRadius="14dp"
+                                    app:backgroundTint="@color/btn_stop_bg"
+                                    android:textColor="@color/btn_stop_text"
+                                    android:layout_marginStart="8dp"
+                                    app:icon="@drawable/ic_stop"
+                                    app:iconTint="@color/btn_stop_text"
+                                    app:iconGravity="textStart" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginTop="10dp">
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_configure_bot"
+                                    style="@style/Widget.MaterialComponents.Button"
+                                    android:layout_width="0dp"
+                                    android:layout_height="48dp"
+                                    android:layout_weight="1"
+                                    android:text="Configure"
+                                    android:textAllCaps="false"
+                                    android:textSize="13sp"
+                                    app:cornerRadius="12dp"
+                                    app:backgroundTint="@color/btn_configure_bg"
+                                    android:textColor="@color/btn_configure_text"
+                                    android:layout_marginEnd="6dp"
+                                    app:icon="@drawable/ic_settings"
+                                    app:iconTint="@color/btn_configure_text"
+                                    app:iconGravity="textStart"
+                                    app:iconSize="18dp" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btn_refresh"
+                                    style="@style/Widget.MaterialComponents.Button"
+                                    android:layout_width="0dp"
+                                    android:layout_height="48dp"
+                                    android:layout_weight="1"
+                                    android:text="Refresh"
+                                    android:textAllCaps="false"
+                                    android:textSize="13sp"
+                                    app:cornerRadius="12dp"
+                                    app:backgroundTint="@color/btn_refresh_bg"
+                                    android:textColor="@color/btn_refresh_text"
+                                    android:layout_marginStart="6dp"
+                                    app:icon="@drawable/ic_refresh"
+                                    app:iconTint="@color/btn_refresh_text"
+                                    app:iconGravity="textStart"
+                                    app:iconSize="18dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FEATURES"
+                        android:textColor="@color/text_muted"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginStart="4dp" />
+
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="2">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="6dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="@color/card_bg"
+                            app:strokeColor="@color/card_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="12dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📷" android:textSize="28sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Camera" android:textColor="@color/text_dark" android:textSize="13sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="6dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="@color/card_bg"
+                            app:strokeColor="@color/card_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="12dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📍" android:textSize="28sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Location" android:textColor="@color/text_dark" android:textSize="13sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="6dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="@color/card_bg"
+                            app:strokeColor="@color/card_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="12dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🔦" android:textSize="28sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Torch" android:textColor="@color/text_dark" android:textSize="13sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="6dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="@color/card_bg"
+                            app:strokeColor="@color/card_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="12dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🎙️" android:textSize="28sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Record" android:textColor="@color/text_dark" android:textSize="13sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="6dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="@color/card_bg"
+                            app:strokeColor="@color/card_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="12dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📸" android:textSize="28sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Screenshot" android:textColor="@color/text_dark" android:textSize="13sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            android:layout_columnWeight="1"
+                            android:layout_margin="6dp"
+                            app:cardElevation="0dp"
+                            app:cardCornerRadius="16dp"
+                            app:cardBackgroundColor="@color/card_bg"
+                            app:strokeColor="@color/card_border"
+                            app:strokeWidth="1dp">
+                            <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:padding="12dp">
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="📱" android:textSize="28sp" />
+                                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Apps" android:textColor="@color/text_dark" android:textSize="13sp" android:textStyle="bold" android:layout_marginTop="6dp" />
+                            </LinearLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </GridLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardElevation="0dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="#EEF2FF"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="24dp">
+                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:padding="16dp" android:gravity="center_vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💡" android:textSize="22sp" android:layout_marginEnd="12dp" />
+                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Send /help in Telegram to see all available commands after starting the bot." android:textColor="@color/primary_dark" android:textSize="13sp" android:lineSpacingExtra="2dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- TAB 1: LOGS -->
         <LinearLayout
             android:id="@+id/tab_logs_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:padding="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="LIVE LOG STREAM"
-                    android:textColor="@color/text_muted"
-                    android:textSize="14sp"
+                    android:text="Message Logs"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.1" />
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/card_border"
-                app:strokeWidth="1dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="28dp"
-                android:layout_marginBottom="16dp">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_messages"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_export_logs"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="6dp"
-                    android:minHeight="80dp"
-                    app:cornerRadius="16dp"
-                    android:text="📤 Export Logs"
-                    android:textColor="@color/btn_export_text"
-                    app:backgroundTint="@color/btn_export_bg"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
+                    android:textColor="@color/text_dark" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_clear_logs"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="6dp"
-                    android:minHeight="80dp"
-                    app:cornerRadius="16dp"
-                    android:text="🗑️ Clear Logs"
-                    android:textColor="@color/btn_stop_text"
-                    app:backgroundTint="@color/white"
-                    app:strokeColor="@color/btn_stop_bg"
-                    app:strokeWidth="1dp"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
-            </GridLayout>
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Clear"
+                    android:textAllCaps="false"
+                    android:textColor="@color/status_offline"
+                    app:icon="@drawable/ic_delete"
+                    app:iconTint="@color/status_offline"
+                    app:iconSize="18dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_export_logs"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Export"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary"
+                    app:icon="@drawable/ic_export"
+                    app:iconTint="@color/primary"
+                    app:iconSize="18dp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_messages"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false" />
         </LinearLayout>
 
-        <!-- TAB 2: Macros -->
+        <!-- TAB 2: MACROS -->
         <LinearLayout
             android:id="@+id/tab_macros_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="⚡"
-                android:textSize="48sp"
-                android:layout_marginBottom="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No macros configured."
-                android:textColor="@color/text_muted"
-                android:textSize="16sp" />
+            android:visibility="gone"
+            android:padding="20dp"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚡" android:textSize="48sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Macros" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/text_dark" android:layout_marginTop="12dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Coming soon — create custom command sequences" android:textSize="14sp" android:textColor="@color/text_muted" android:layout_marginTop="8dp" android:gravity="center" />
         </LinearLayout>
 
-        <!-- TAB 3: Admin -->
+        <!-- TAB 3: ADMIN -->
         <LinearLayout
             android:id="@+id/tab_admin_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="gone">
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="1">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_configure_bot"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="6dp"
-                    android:minHeight="80dp"
-                    app:cornerRadius="16dp"
-                    android:text="⚙️ Configure Bot"
-                    android:textColor="@color/btn_configure_text"
-                    app:backgroundTint="@color/btn_configure_bg"
-                    android:textStyle="bold"
-                    android:textSize="12sp" />
-            </GridLayout>
+            android:visibility="gone"
+            android:padding="20dp"
+            android:gravity="center">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="👤" android:textSize="48sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Admin" android:textSize="22sp" android:textStyle="bold" android:textColor="@color/text_dark" android:layout_marginTop="12dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bot configuration and settings" android:textSize="14sp" android:textColor="@color/text_muted" android:layout_marginTop="8dp" android:gravity="center" />
         </LinearLayout>
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
     </FrameLayout>
 
+    <!-- BOTTOM NAV -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="72dp"
         android:layout_gravity="bottom"
-        android:background="#F3EDF7"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:background="@color/card_bg"
+        android:elevation="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
 
-        <LinearLayout
-            android:id="@+id/nav_status"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?android:attr/selectableItemBackground">
-            
-            <FrameLayout
-                android:id="@+id/nav_status_icon_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_nav_active"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="4dp">
-                <TextView
-                    android:id="@+id/nav_status_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="📊"
-                    android:textSize="20sp" />
+        <LinearLayout android:id="@+id/nav_status" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:background="?android:attr/selectableItemBackground">
+            <FrameLayout android:id="@+id/nav_status_icon_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/bg_nav_active" android:paddingHorizontal="18dp" android:paddingVertical="4dp">
+                <TextView android:id="@+id/nav_status_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="🏠" android:textSize="20sp" />
             </FrameLayout>
-            
-            <TextView
-                android:id="@+id/nav_status_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Status"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_dark"
-                android:layout_marginTop="4dp" />
+            <TextView android:id="@+id/nav_status_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Home" android:textSize="11sp" android:textStyle="bold" android:textColor="@color/primary" android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/nav_logs"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:alpha="0.6"
-            android:background="?android:attr/selectableItemBackground">
-            
-            <FrameLayout
-                android:id="@+id/nav_logs_icon_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="4dp">
-                <TextView
-                    android:id="@+id/nav_logs_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="💬"
-                    android:textSize="20sp" />
+        <LinearLayout android:id="@+id/nav_logs" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.6" android:background="?android:attr/selectableItemBackground">
+            <FrameLayout android:id="@+id/nav_logs_icon_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@android:color/transparent" android:paddingHorizontal="18dp" android:paddingVertical="4dp">
+                <TextView android:id="@+id/nav_logs_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="💬" android:textSize="20sp" />
             </FrameLayout>
-            
-            <TextView
-                android:id="@+id/nav_logs_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Logs"
-                android:textSize="12sp"
-                android:textColor="@color/text_muted"
-                android:layout_marginTop="4dp" />
+            <TextView android:id="@+id/nav_logs_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Logs" android:textSize="11sp" android:textColor="@color/text_muted" android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/nav_macros"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:alpha="0.6"
-            android:background="?android:attr/selectableItemBackground">
-            
-            <FrameLayout
-                android:id="@+id/nav_macros_icon_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="4dp">
-                <TextView
-                    android:id="@+id/nav_macros_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⚡"
-                    android:textSize="20sp" />
+        <LinearLayout android:id="@+id/nav_macros" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.6" android:background="?android:attr/selectableItemBackground">
+            <FrameLayout android:id="@+id/nav_macros_icon_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@android:color/transparent" android:paddingHorizontal="18dp" android:paddingVertical="4dp">
+                <TextView android:id="@+id/nav_macros_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⚡" android:textSize="20sp" />
             </FrameLayout>
-            
-            <TextView
-                android:id="@+id/nav_macros_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Macros"
-                android:textSize="12sp"
-                android:textColor="@color/text_muted"
-                android:layout_marginTop="4dp" />
+            <TextView android:id="@+id/nav_macros_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Macros" android:textSize="11sp" android:textColor="@color/text_muted" android:layout_marginTop="2dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/nav_admin"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:alpha="0.6"
-            android:background="?android:attr/selectableItemBackground">
-            
-            <FrameLayout
-                android:id="@+id/nav_admin_icon_bg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="4dp">
-                <TextView
-                    android:id="@+id/nav_admin_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="👤"
-                    android:textSize="20sp" />
+        <LinearLayout android:id="@+id/nav_admin" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:orientation="vertical" android:gravity="center" android:alpha="0.6" android:background="?android:attr/selectableItemBackground">
+            <FrameLayout android:id="@+id/nav_admin_icon_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@android:color/transparent" android:paddingHorizontal="18dp" android:paddingVertical="4dp">
+                <TextView android:id="@+id/nav_admin_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="👤" android:textSize="20sp" />
             </FrameLayout>
-            
-            <TextView
-                android:id="@+id/nav_admin_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Admin"
-                android:textSize="12sp"
-                android:textColor="@color/text_muted"
-                android:layout_marginTop="4dp" />
+            <TextView android:id="@+id/nav_admin_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Admin" android:textSize="11sp" android:textColor="@color/text_muted" android:layout_marginTop="2dp" />
         </LinearLayout>
     </LinearLayout>
 
