@@ -20,8 +20,15 @@ This Android application runs a Telegram bot directly on your phone. You can con
 - **Contacts & Call logs** – Export contacts and recent call history
 - **Gallery** – List recent photos
 - **Clipboard** – Read current clipboard content
-- **Device status** – Battery, storage, network info
+- **Device status** – Battery, storage, network, uptime, brightness & more
 - **Remote actions** – Ring the phone, call forwarding helpers, etc.
+- **Flashlight / Torch** – Toggle the device flashlight
+- **Vibrate** – Make the phone vibrate
+- **Volume control** – Get and set media volume
+- **Text-to-Speech** – Make the phone speak any text
+- **Toast messages** – Show messages on the phone screen
+- **App management** – List installed apps and open them remotely
+- **Network info** – Local + Public IP address
 - **Runs in background** – Persistent foreground service + auto-start on boot
 - **Telegram Mini App** – Companion web interface included in `/web`
 
@@ -29,26 +36,41 @@ This Android application runs a Telegram bot directly on your phone. You can con
 
 ## Available Commands
 
-| Command              | Description                              |
-|----------------------|------------------------------------------|
-| `/start`             | Welcome message & overview               |
-| `/help`              | List all available commands              |
-| `/camera` or `/camera_back` | Take photo with back camera         |
-| `/camera_front`      | Take photo with front camera             |
-| `/screenshot`        | Capture current screen                   |
-| `/record`            | Record ~40 seconds of audio              |
-| `/location`          | Get current device location              |
-| `/contacts`          | Export contacts list                     |
-| `/call_log`          | Export recent call logs                  |
-| `/gallery`           | Show recent gallery photos               |
-| `/clipboard`         | Get current clipboard text               |
-| `/status`            | Battery, storage & device status         |
-| `/ring`              | Make the phone ring                      |
-| `/forward`           | Call forwarding related helpers          |
-| `/ping`              | Check if bot is alive                    |
-| `/time`              | Get current device time                  |
-| `/info`              | Device information                       |
-| `/echo <text>`       | Echo back the message                    |
+| Command                    | Description                                      |
+|----------------------------|--------------------------------------------------|
+| `/start`                   | Welcome message & overview                       |
+| `/help`                    | Full list of all commands                        |
+| **Media & Capture**        |                                                  |
+| `/camera` / `/camera_back` | Take photo with back camera                      |
+| `/camera_front`            | Take photo with front camera                     |
+| `/screenshot`              | Capture current screen                           |
+| `/record`                  | Record ~40 seconds of audio                      |
+| `/gallery`                 | Show recent gallery photos                       |
+| **Device Info**            |                                                  |
+| `/status`                  | Full device status (battery, storage, network…)  |
+| `/location`                | Get current device location                      |
+| `/ip`                      | Show Local + Public IP                           |
+| `/uptime`                  | Device uptime                                    |
+| `/time`                    | Current device time                              |
+| `/info`                    | Bot information                                  |
+| **Data**                   |                                                  |
+| `/contacts`                | Export contacts list                             |
+| `/call_log`                | Export recent call logs                          |
+| `/clipboard`               | Get current clipboard text                       |
+| **Advanced Controls**      |                                                  |
+| `/torch` / `/flashlight`   | Toggle flashlight                                |
+| `/vibrate [ms]`            | Vibrate device (default 1000 ms)                 |
+| `/volume`                  | Show current volume levels                       |
+| `/volume <0-100>`          | Set media volume percentage                      |
+| `/toast <message>`         | Show a toast message on the phone                |
+| `/speak <text>`            | Speak text using Text-to-Speech                 |
+| `/apps`                    | List installed user apps                         |
+| `/open <package\|name>`    | Open an app by package or name                   |
+| `/ring`                    | Make the phone ring                              |
+| `/forward <number>`        | Setup call forwarding                            |
+| **Misc**                   |                                                  |
+| `/ping`                    | Check if bot is alive                            |
+| `/echo <text>`             | Echo back the message                            |
 
 ---
 
@@ -117,6 +139,7 @@ The app requests the following permissions (all necessary for the features):
 - Receive Boot Completed
 - Post Notifications
 - Wake Lock
+- Vibrate
 
 On Android 13+ you will also need to grant notification permission.
 
