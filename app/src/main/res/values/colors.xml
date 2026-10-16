@@ -1,31 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#6750A4</color>
-    <color name="purple_700">#6750A4</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Brand -->
+    <color name="purple_200">#BB86FC</color>
+    <color name="purple_500">#7C3AED</color>
+    <color name="purple_700">#5B21B6</color>
+    <color name="teal_200">#2DD4BF</color>
+    <color name="teal_700">#0D9488</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green_700">#16A34A</color>
     <color name="red_700">#DC2626</color>
-    <color name="background">#F7F9FB</color>
-    
-    <color name="bg_light">#F7F9FB</color>
-    <color name="primary_dark">#6750A4</color>
+
+    <!-- Modern Theme -->
+    <color name="background">#F1F5F9</color>
+    <color name="bg_light">#F8FAFC</color>
+    <color name="primary">#7C3AED</color>
+    <color name="primary_dark">#5B21B6</color>
+    <color name="primary_light">#A78BFA</color>
+    <color name="accent">#06B6D4</color>
+    <color name="accent_soft">#CFFAFE</color>
+
     <color name="text_dark">#0F172A</color>
+    <color name="text_primary">#1E293B</color>
     <color name="text_muted">#64748B</color>
+    <color name="text_hint">#94A3B8</color>
+
     <color name="card_bg">#FFFFFF</color>
-    <color name="card_border">#F1F5F9</color>
-    
-    <color name="btn_configure_bg">#EADDFF</color>
-    <color name="btn_configure_text">#21005D</color>
-    <color name="btn_export_bg">#D1E1FF</color>
-    <color name="btn_export_text">#001D35</color>
-    <color name="btn_stop_bg">#F2B8B5</color>
-    <color name="btn_stop_text">#601410</color>
-    <color name="btn_refresh_bg">#C2E7FF</color>
-    <color name="btn_refresh_text">#001D35</color>
-    <color name="btn_start_bg">#C4EDD0</color>
-    <color name="btn_start_text">#003912</color>
+    <color name="card_border">#E2E8F0</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F1F5F9</color>
+
+    <!-- Status -->
+    <color name="status_online">#10B981</color>
+    <color name="status_offline">#EF4444</color>
+    <color name="status_online_bg">#D1FAE5</color>
+    <color name="status_offline_bg">#FEE2E2</color>
+
+    <!-- Buttons -->
+    <color name="btn_configure_bg">#EDE9FE</color>
+    <color name="btn_configure_text">#5B21B6</color>
+    <color name="btn_export_bg">#E0F2FE</color>
+    <color name="btn_export_text">#0369A1</color>
+    <color name="btn_stop_bg">#FEE2E2</color>
+    <color name="btn_stop_text">#B91C1C</color>
+    <color name="btn_refresh_bg">#E0F2FE</color>
+    <color name="btn_refresh_text">#0369A1</color>
+    <color name="btn_start_bg">#D1FAE5</color>
+    <color name="btn_start_text">#047857</color>
+
+    <!-- Header -->
+    <color name="header_start">#7C3AED</color>
+    <color name="header_end">#4F46E5</color>
+    <color name="gradient_soft_start">#F5F3FF</color>
+    <color name="gradient_soft_end">#EEF2FF</color>
 </resources>
